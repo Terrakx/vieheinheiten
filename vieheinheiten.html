@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vieheinheitenrechner</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #564caf;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 600px;
+    }
+    button:hover {
+        background-color: #aba1ff;
+    }
+    .accordion {
+        background-color: #f9f9f9;
+        color: #333;
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px; 
+        text-align: left;
+        font-size: 16px; 
+        transition: background-color 0.4s ease;
+    }
+
+    .accordion:hover, .accordion.active {
+        background-color: #e7e7e7; 
+    }
+
+    .panel {
+        display: none; 
+        background-color: white; 
+        padding: 0 20px 20px; 
+        border: 1px solid #ccc; 
+        border-top: none; 
+    }
+    select {
+        width: 100%; 
+        padding: 8px; 
+        margin-top: 5px;
+        margin-bottom: 15px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+        background-color: white; 
+        font-family: Arial, sans-serif; 
+        color: #333; 
+    }
+
+    select:focus {
+        border-color: #564caf; 
+        outline: none; 
+    }
+    footer {
+        background-color: #414141;
+        color: #fff;
+        padding: 5px;
+        text-align: center;
+    }
+
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 align="center">Viehzuchtbetrieb als landw. Betrieb gem. § 30 BewG 1955</h1><br>
+        <h3>Landwirtschaftliche Fläche</h3>
+        <input type="number" id="landw_fl">
+        <h3>Fütterung durch Eigenmittel (>50%)</h3>
+        <select id="self_grown">
+            <option value="yes">Ja, überwiegend Eigenproduktion</option>
+            <option value="no">Nein, überwiegend zugekauft</option>
+        </select>
+        <h3>Durchschnittliche Tieranzahl</h3>
+        <!-- Pferde -->
+        <div class="accordion" onclick="toggleAccordion('pferdeSection')">Pferde</div>
+        <div id="pferdeSection" class="panel">
+            <label for="foal_count">Anzahl der Fohlen: (bis ein Jahr)</label>
+            <input type="number" id="foal_count">
+            <label for="young_horse_1_3_count">Anzahl der Jungpferde ein bis drei Jahre:</label>
+            <input type="number" id="young_horse_1_3_count">
+            <label for="adult_horse_count">Anzahl der anderen Pferde über 3 Jahre:</label>
+            <input type="number" id="adult_horse_count">
+        </div>
+
+        <div class="accordion" onclick="toggleAccordion('rinderSection')">Rinder</div>
+        <div id="rinderSection" class="panel">
+        <!-- Rinder -->
+            <label for="cattle_under_6_months">Rinder bis sechs Monate:</label>
+            <input type="number" id="cattle_under_6_months">
+            <label for="cattle_6_12_months">Rinder sechs Monate bis ein Jahr:</label>
+            <input type="number" id="cattle_6_12_months">
+            <label for="cattle_1_1_5_years">Rinder ein bis eineinhalb Jahren:</label>
+            <input type="number" id="cattle_1_1_5_years">
+            <label for="cattle_1_5_2_years">Rinder eineinhalb bis zwei Jahre:</label>
+            <input type="number" id="cattle_1_5_2_years">
+            <label for="cattle_over_2_years">Rinder über zwei Jahre:</label>
+            <input type="number" id="cattle_over_2_years">
+        </div>
+
+        <div class="accordion" onclick="toggleAccordion('schafeSection')">Schafe</div>
+        <div id="schafeSection" class="panel">
+        <!-- Schafe -->
+            <label for="sheep_under_6_months">Lämmer bis sechs Monate:</label>
+            <input type="number" id="sheep_under_6_months">
+            <label for="sheep_6_12_months">Schafe sechs Monate bis ein Jahr:</label>
+            <input type="number" id="sheep_6_12_months">
+            <label for="sheep_over_1_year">Schafe über ein Jahr:</label>
+            <input type="number" id="sheep_over_1_year">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('ziegenSection')">Ziegen</div>
+        <div id="ziegenSection" class="panel">
+            <!-- Ziegen -->
+            <label for="goats_6_12_months">Ziegen sechs Monate bis ein Jahr:</label>
+            <input type="number" id="goats_6_12_months">
+            <label for="goats_over_1_year">Ziegen über ein Jahr:</label>
+            <input type="number" id="goats_over_1_year">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('schweineSection')">Schweine</div>
+        <div id="schweineSection" class="panel">
+        <!-- Schweine -->
+            <label for="piglets">Ferkel (10 bis 30 kg):</label>
+            <input type="number" id="piglets">
+            <label for="fattening_pigs_from_purchased_piglets">Mastschweine aus zugekauften Ferkeln:</label>
+            <input type="number" id="fattening_pigs_from_purchased_piglets">
+            <label for="fattening_pigs_from_own_piglets">Mastschweine aus eigenen Ferkeln:</label>
+            <input type="number" id="fattening_pigs_from_own_piglets">
+            <label for="gilts_and_young_boars">Jungsauen Jungeber:</label>
+            <input type="number" id="gilts_and_young_boars">
+            <label for="breeding_sows_and_boars">Zuchtsauen Zuchteber:</label>
+            <input type="number" id="breeding_sows_and_boars">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('huhnSection')">Hühner</div>
+        <div id="huhnSection" class="panel">
+        <!-- Hühner -->
+            <label for="young_hens">Junghennen:</label>
+            <input type="number" id="young_hens">
+            <label for="laying_hens_from_purchased_young_hens">Legehennen aus zugekauften Junghennen:</label>
+            <input type="number" id="laying_hens_from_purchased_young_hens">
+            <label for="young_broilers">Jungmasthühner:</label>
+            <input type="number" id="young_broilers">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('gefSection')">Sonstiges Geflügel</div>
+        <div id="gefSection" class="panel">
+            <!-- Übriges Geflügel -->
+            <label for="fattening_ducks">Mastenten:</label>
+            <input type="number" id="fattening_ducks">
+            <label for="fattening_geese">Mastgänse:</label>
+            <input type="number" id="fattening_geese">
+            <label for="fattening_turkeys">Mastputen:</label>
+            <input type="number" id="fattening_turkeys">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('haseSection')">Hasen und Kaninchen</div>
+        <div id="haseSection" class="panel">
+        <!-- Kaninchen -->
+            <label for="breeding_and_angora_rabbits">Zucht- und Angorakaninchen:</label>
+            <input type="number" id="breeding_and_angora_rabbits">
+            <label for="fattening_rabbits">Mastkaninchen:</label>
+            <input type="number" id="fattening_rabbits">
+        </div>
+        
+        <div class="accordion" onclick="toggleAccordion('damSection')">Damtiere</div>
+        <div id="damSection" class="panel">
+            <!-- Damtiere -->
+            <label for="game_animals">Damtiere:</label>
+            <input type="number" id="game_animals">
+        </div>
+        
+        <button id="calculateButton">Berechnen</button>
+
+    </div>
+    <footer>
+        <p>&copy; 2024 Andreas Pany</p>
+    </footer>    
+<!-- Toast Notification Import-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+    toastr.options = {
+        closeButton: true, // Aktiviert den Schließen-Button
+        progressBar: true, // Zeigt einen Fortschrittsbalken an
+        preventDuplicates: true, // Verhindert doppelte Nachrichten
+        newestOnTop: true, // Neueste Nachrichten oben anzeigen
+        timeOut: 20000, // Die Benachrichtigung bleibt bestehen, bis sie aktiv geschlossen wird
+        extendedTimeOut: 0, // Zusätzliche Anzeigezeit, nachdem der Benutzer mit der Benachrichtigung interagiert hat
+        tapToDismiss: false // Deaktiviert das Schließen der Benachrichtigung durch Klicken irgendwo darauf
+    };
+    function toggleAccordion(sectionId) {
+        var section = document.getElementById(sectionId);
+        if (section.style.display === "block") {
+            section.style.display = "none";
+        } else {
+            section.style.display = "block";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('calculateButton').addEventListener('click', calculateTotalUnits);
+    });
+
+    function calculateMaxVieheinheiten(hektar) {
+        const thresholds = [[10, 8], [20, 6], [30, 4], [40, 3], [50, 2]]; // Korrektur hier: Tupel als Array von Arrays
+        const rest_ve_per_ha = 1.5;
+        let remaining_hektar = hektar;
+        let max_ve = 0;
+
+        thresholds.forEach(([threshold, ve_per_ha]) => { // Korrekte Nutzung der Destructuring-Zuweisung
+            if (remaining_hektar > threshold) {
+                max_ve += Math.min(threshold, remaining_hektar) * ve_per_ha;
+                remaining_hektar -= threshold;
+            } else {
+                max_ve += remaining_hektar * ve_per_ha;
+                remaining_hektar = 0; // Beendet die Schleife, wenn keine Hektar mehr übrig sind
+                return; // Frühzeitiger Ausstieg aus der forEach-Schleife
+            }
+        });
+
+        // Für die restlichen Hektar über 50
+        if (remaining_hektar > 0) {
+            max_ve += remaining_hektar * rest_ve_per_ha;
+        }
+
+        toastr.info(`Maximale Vieheinheiten für ${hektar} Hektar: ${max_ve.toFixed(2)}`);
+        return max_ve;
+    }
+
+    const conversionFactors = {
+      "Pferde": {
+        "Fohlen": 0.35,
+        "JungpferdeEinBisDreiJahre": 0.6,
+        "AnderePferdeUeberDreiJahre": 0.8
+      },
+      "Rinder": {
+        "BisSechsMonate": 0.3,
+        "SechsMonateBisEinJahr": 0.55,
+        "EinBisEineinhalbJahre": 0.65,
+        "EineinhalbbiszweiJahre": 0.8,
+        "UeberZweiJahre": 1.0
+      },
+      "Schafe": {
+        "LämmerBisSechsMonate": 0.002,
+        "SechsMonateBisEinJahr": 0.1,
+        "UeberEinJahr": 0.15
+      },
+      "Ziegen": {
+        "BisEinJahr": 0.05,
+        "UeberEinJahr": 0.12
+      },
+      "Schweine": {
+        "Ferkel": 0.01,
+        "Mastschweine_zugekauft": 0.06,
+        "Mastschweine_eigen": 0.07,
+        "JungsauJungeber": 0.1,
+        "ZuchtsauenZuchteber": 0.35
+      },
+      "Hühner": {
+        "Junghennen": 0.002,
+        "Legehennen": 0.013,
+        "Masthühner": 0.001
+      },
+      "ÜbrigesGeflügel": {
+        "Enten": 0.003,
+        "Gänse": 0.006,
+        "Puten": 0.009
+      },
+      "Kaninchen": {
+        "ZuchtUndAngorakaninchen": 0.034,
+        "Mastkaninchen": 0.002
+      },
+      "Damtiere": {
+        "Damwild": 0.09
+    },
+    // Weitere Tiere analog
+    };
+    function calculateTotalUnits() {
+        let totalUnits = 0;
+        const landwFl = parseFloat(document.getElementById('landw_fl').value) || 0;
+        const isSelfGrown = document.getElementById('self_grown').value;
+
+        // Pferde
+        totalUnits += (parseInt(document.getElementById('foal_count').value) || 0) * conversionFactors.Pferde.Fohlen;
+        totalUnits += (parseInt(document.getElementById('young_horse_1_3_count').value) || 0) * conversionFactors.Pferde.JungpferdeEinBisDreiJahre;
+        totalUnits += (parseInt(document.getElementById('adult_horse_count').value) || 0) * conversionFactors.Pferde.AnderePferdeUeberDreiJahre;
+
+        // Rinder
+        totalUnits += (parseInt(document.getElementById('cattle_under_6_months').value) || 0) * conversionFactors.Rinder.BisSechsMonate;
+        totalUnits += (parseInt(document.getElementById('cattle_6_12_months').value) || 0) * conversionFactors.Rinder.SechsMonateBisEinJahr;
+        totalUnits += (parseInt(document.getElementById('cattle_1_1_5_years').value) || 0) * conversionFactors.Rinder.EinBisEineinhalbJahre;
+        totalUnits += (parseInt(document.getElementById('cattle_1_5_2_years').value) || 0) * conversionFactors.Rinder.EineinhalbbiszweiJahre;
+        totalUnits += (parseInt(document.getElementById('cattle_over_2_years').value) || 0) * conversionFactors.Rinder.UeberZweiJahre;
+
+        // Schafe
+        totalUnits += (parseInt(document.getElementById('sheep_under_6_months').value) || 0) * conversionFactors.Schafe.LämmerBisSechsMonate;
+        totalUnits += (parseInt(document.getElementById('sheep_6_12_months').value) || 0) * conversionFactors.Schafe.SechsMonateBisEinJahr;
+        totalUnits += (parseInt(document.getElementById('sheep_over_1_year').value) || 0) * conversionFactors.Schafe.UeberEinJahr;
+
+        // Ziegen
+        totalUnits += (parseInt(document.getElementById('goats_6_12_months').value) || 0) * conversionFactors.Ziegen.BisEinJahr;
+        totalUnits += (parseInt(document.getElementById('goats_over_1_year').value) || 0) * conversionFactors.Ziegen.UeberEinJahr;
+
+        // Schweine
+        totalUnits += (parseInt(document.getElementById('piglets').value) || 0) * conversionFactors.Schweine.Ferkel;
+        totalUnits += (parseInt(document.getElementById('fattening_pigs_from_purchased_piglets').value) || 0) * conversionFactors.Schweine.Mastschweine_zugekauft;
+        totalUnits += (parseInt(document.getElementById('fattening_pigs_from_own_piglets').value) || 0) * conversionFactors.Schweine.Mastschweine_eigen;
+        totalUnits += (parseInt(document.getElementById('gilts_and_young_boars').value) || 0) * conversionFactors.Schweine.JungsauJungeber;
+        totalUnits += (parseInt(document.getElementById('breeding_sows_and_boars').value) || 0) * conversionFactors.Schweine.ZuchtsauenZuchteber;
+
+        // Hühner
+        totalUnits += (parseInt(document.getElementById('young_hens').value) || 0) * conversionFactors.Hühner.Junghennen;
+        totalUnits += (parseInt(document.getElementById('laying_hens_from_purchased_young_hens').value) || 0) * conversionFactors.Hühner.Legehennen;
+        totalUnits += (parseInt(document.getElementById('young_broilers').value) || 0) * conversionFactors.Hühner.Masthühner;
+
+        // Übriges Geflügel
+        totalUnits += (parseInt(document.getElementById('fattening_ducks').value) || 0) * conversionFactors.ÜbrigesGeflügel.Enten;
+        totalUnits += (parseInt(document.getElementById('fattening_geese').value) || 0) * conversionFactors.ÜbrigesGeflügel.Gänse;
+        totalUnits += (parseInt(document.getElementById('fattening_turkeys').value) || 0) * conversionFactors.ÜbrigesGeflügel.Puten;
+
+        // Kaninchen
+        totalUnits += (parseInt(document.getElementById('breeding_and_angora_rabbits').value) || 0) * conversionFactors.Kaninchen.ZuchtUndAngorakaninchen;
+        totalUnits += (parseInt(document.getElementById('fattening_rabbits').value) || 0) * conversionFactors.Kaninchen.Mastkaninchen;
+
+        // Damtiere
+        totalUnits += (parseInt(document.getElementById('game_animals').value) || 0) * conversionFactors.Damtiere.Damwild;
+
+        console.log("Gesamte Vieheinheiten: ", totalUnits.toFixed(2));
+        toastr.info("Gesamte Vieheinheiten: " + totalUnits.toFixed(2));
+        // Berechnung der maximal möglichen Vieheinheiten
+        let maxUnits = calculateMaxVieheinheiten(landwFl);
+        // Überprüfung der Vieheinheiten gegen das Maximum und Ausgabe des Ergebnisses
+        checkVieheinheitenAgainstMax(totalUnits, maxUnits, isSelfGrown);
+    }
+    function checkVieheinheitenAgainstMax(totalUnits, maxUnits, isSelfGrown) {
+        if (isSelfGrown === 'yes') {
+            toastr.success(`Vieheinheiten nicht relevant, da überwiegende Eigenfütterung.`);
+        } else if (totalUnits <= maxUnits) {
+            toastr.success(`Erfolg: Die Gesamtzahl der Vieheinheiten (${totalUnits.toFixed(2)}) liegt innerhalb des zulässigen Bereichs (${maxUnits.toFixed(2)}).`);
+        } else {
+            toastr.error(`Fehler: Die Gesamtzahl der Vieheinheiten (${totalUnits.toFixed(2)}) überschreitet den zulässigen Bereich (${maxUnits.toFixed(2)}).`);
+        }
+    }
+
+</script>
+
+</body>
+</html>
