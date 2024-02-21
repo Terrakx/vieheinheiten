@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
 <style>
     body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        display: grid;
+        grid-template-rows: auto 1fr auto; /* Footer will take remaining space */
+        min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
     }
     .container {
         max-width: 600px;
@@ -222,6 +226,7 @@
         extendedTimeOut: 0, // Zusätzliche Anzeigezeit, nachdem der Benutzer mit der Benachrichtigung interagiert hat
         tapToDismiss: false // Deaktiviert das Schließen der Benachrichtigung durch Klicken irgendwo darauf
     };
+    
     function toggleAccordion(sectionId) {
         var section = document.getElementById(sectionId);
         if (section.style.display === "block") {
@@ -309,6 +314,7 @@
     },
     // Weitere Tiere analog
     };
+    
     function calculateTotalUnits() {
         let totalUnits = 0;
         const landwFl = parseFloat(document.getElementById('landw_fl').value) || 0;
@@ -366,6 +372,7 @@
         // Überprüfung der Vieheinheiten gegen das Maximum und Ausgabe des Ergebnisses
         checkVieheinheitenAgainstMax(totalUnits, maxUnits, isSelfGrown);
     }
+    
     function checkVieheinheitenAgainstMax(totalUnits, maxUnits, isSelfGrown) {
         if (isSelfGrown === 'yes') {
             toastr.success(`Vieheinheiten nicht relevant, da überwiegende Eigenfütterung.`);
@@ -377,6 +384,5 @@
     }
 
 </script>
-
 </body>
 </html>
